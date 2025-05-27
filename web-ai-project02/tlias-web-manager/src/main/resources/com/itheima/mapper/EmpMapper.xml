@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.EmpMapper">
+    <delete id="deleteById">
+        delete from emp where id in
+        /*注意collection 和item中内容 不要写反 item为被分割出来的元素 500为后端出错 400为前端出错*/
+        <foreach item="id" collection="ids" separator="," close=")" open="(">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="list" resultType="com.itheima.pojo.Emp">
+        select e.*, d.name as deptName from emp e left join dept d on e.dept_id=d.id
+        <where>
+        <if test="name != null and name != ''">
+            e.name like concat('%',#{name},'%')
+        </if>
+        <if test="gender != null">
+                and e.gender= #{gender}
+        </if>
+        <if test="begin != null and end != null">
+            and e.entry_date between #{begin} and #{end}
+        </if>
+        </where>
+        order by e.update_time desc
+    </select>
+
+    <!--查询返回类型和实体类名字能对应上，使用resulttype类型。若对应不上，需要使用resultMap类型进行手动封装-->
+    <!--根据员工id查询信息 因为工作经历有多次 返回多条数据 应手动封装结果先id封装 普通属性用result 使用resultmap colume为数据库中信息 property为emp实体类中封装的信息-->
+    <resultMap id="empResultMap" type="com.itheima.pojo.Emp">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="gender" column="gender"/>
+        <result property="phone" column="phone"/>
+        <result property="job" column="job"/>
+        <result property="salary" column="salary"/>
+        <result property="image" column="image"/>
+        <result property="entryDate" column="entry_date"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <!--collection 封装集合类型-->
+        <collection property="exprList" ofType="com.itheima.pojo.EmpExpr">
+            <id property="id" column="e.id"/>
+            <result property="empId" column="ex_emp_id"/>
+            <result property="begin" column="ex_begin"/>
+            <result property="end" column="ex_end"/>
+            <result property="company" column="ex_company"/>
+            <result property="job" column="ex_job"/>
+        </collection>
+    </resultMap>
+    <select id="getById" resultMap="empResultMap">
+        select
+            e.*,
+            ex.id ex_id,
+            ex.emp_id ex_emp_id,
+            ex.begin ex_begin,
+            ex.end ex_end,
+            ex.company ex_company,
+            ex.job ex_job
+        from emp e left join emp_expr ex on e.id=ex.emp_id
+        where e.id=#{id}
+    </select>
+
+    <!--统计员工职位人数-->
+    <!--case函数最后以end结尾-->
+    <select id="coutEmpJobData" resultType="java.util.Map">
+        select
+            (case when job =1 then '班主任'
+                   when job =2 then '讲师'
+                   when job =3 then '学工主管'
+                   when job =4 then '教研主管'
+                   when job =5 then '咨询师'
+                   else '其他' end) as pos,
+            count(*) as num
+        from emp group by job order by num
+    </select>
+
+    <!--统计员工性别人数-->
+    <!--if（expr,val1,val2）如果表达式expr成立取val1，若expr不成立取val2-->
+    <!--ifnull(expr,val1)如果表达式expr不为空取自身，为null取val1-->
+    <select id="coutEmpGenderData" resultType="java.util.Map">
+            select
+                if(gender = 1, '男性员工', '女性员工') as name,
+                count(*) as value
+            from emp group by gender
+    </select>
+
+    <!--更新员工基本信息 封装在实体类中的值需要使用驼峰命名-->
+    <!--set自动生成set关键字，自动去除最后一个多余的逗号-->
+    <update id="updateById">
+        UPDATE emp
+        <set>
+            <if test="username != null and username != ''">username = #{username},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="job != null">job = #{job},</if>
+            <if test="salary != null">salary = #{salary},</if>
+            <if test="image != null and image != ''">image = #{image},</if>
+            <if test="entryDate != null">entry_date = #{entryDate},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="updateTime != null">update_time = #{updateTime}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+</mapper>
