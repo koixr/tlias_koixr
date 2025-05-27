@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>上传文件</title>
+</head>
+<body>
+
+    <!--post文件数据量过大get无法达到 enctype=multipart/form-data不添加该属性只会提交文件名，加上之后才能提交整个文件 file-->
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        姓名: <input type="text" name="name"><br>
+        年龄: <input type="text" name="age"><br>
+        头像: <input type="file" name="file"><br>
+        <input type="submit" value="提交">
+    </form>
+
+</body>
+</html>
