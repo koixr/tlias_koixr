@@ -30,6 +30,7 @@ public interface StudentMapper {
      * 新增学生信息
      */
     @Insert("insert into student(name,no,gender,phone,degree,clazz_id,id_card,is_college,address,graduation_date,create_time,update_time) values(#{name},#{no},#{gender},#{phone},#{degree},#{clazzId},#{idCard},#{isCollege},#{address},#{graduationDate},#{createTime},#{updateTime})")
+//    @Insert("insert into student(name,no,gender,phone,degree,clazz_id,id_card,is_college,address,graduation_date,create_time,update_time,iv) values(#{name},#{no},#{gender},#{phone},#{degree},#{clazzId},AES_ENCRYPT(#{idCard}, @key, @iv),#{isCollege},#{address},#{graduationDate},#{createTime},#{updateTime},@iv)")
     void insert(Student student);
 
     /**
@@ -38,6 +39,7 @@ public interface StudentMapper {
      * @return
      */
     @Select("select * from student where id = #{id}")
+//    @Select("select id, name, no, gender, phone, AES_DECRYPT(id_card, 'sjh', iv) AS aes_id_card, is_college, address, degree, graduation_date, clazz_id, violation_count, violation_score, create_time, update_time, iv from student where id = #{id}")
     Student getById(Integer id);
 
     /**

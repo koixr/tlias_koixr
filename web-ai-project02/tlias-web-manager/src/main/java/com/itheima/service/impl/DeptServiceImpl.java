@@ -1,5 +1,6 @@
 package com.itheima.service.impl;
 
+import com.itheima.anno.LogOperation;
 import com.itheima.mapper.DeptMapper;
 import com.itheima.pojo.Dept;
 import com.itheima.service.DeptService;
@@ -16,11 +17,13 @@ public class DeptServiceImpl implements DeptService {
     @Autowired  //tab错了，导致deptMapper可能为null
     private DeptMapper deptMapper;
 
+    @LogOperation //使自己定义的注解生效
     @Override
     public List<Dept> findAll() {
         return deptMapper.findAll();
     }
 
+    @LogOperation
     @Override
     public void deleteById(Integer id) {
         deptMapper.deleteById(id);
