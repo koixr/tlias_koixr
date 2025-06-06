@@ -3,6 +3,7 @@ package com.itheima.aop;
 
 import com.itheima.mapper.OperateLogMapper;
 import com.itheima.pojo.OperateLog;
+import com.itheima.utils.CurrentHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -65,6 +66,6 @@ public class OperateLogAspect {
     }
 
     private Integer getCurrentUserId() {
-        return 1;
+        return CurrentHolder.getCurrentId();
     }
 }

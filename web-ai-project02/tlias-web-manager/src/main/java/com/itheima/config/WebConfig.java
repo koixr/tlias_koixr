@@ -24,10 +24,10 @@ public class WebConfig implements WebMvcConfigurer {
 //                .addPathPatterns("/**");///**表示拦截所有请求
 //    }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(tokenInterceptor)
-                .addPathPatterns("/**")//  /**表示拦截所有级路径所有请求 /*只拦截一级路径
-                .excludePathPatterns("/login");//表示拦截除了login请求
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(tokenInterceptor)
+//                .addPathPatterns("/**")//  /**表示拦截所有级路径所有请求 /*只拦截一级路径
+//                .excludePathPatterns("/login");//表示拦截除了login请求
+//    }
 }

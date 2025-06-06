@@ -10,6 +10,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 /**
  * 令牌校验拦截器
  */
+//webconfig 控制拦截器的拦截路径
 @Slf4j
 @Component
 public class TokenInterceptor implements HandlerInterceptor {

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-//filter是web级别的 interceptor是springboot集成的 所以先filter后interceptor
+//filter是web级别的 interceptor是springboot集成的 所以先运行filter后interceptor
 @Slf4j
 @Component
 public class DemoInterceptor implements HandlerInterceptor {
